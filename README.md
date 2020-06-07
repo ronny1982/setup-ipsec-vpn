@@ -1,44 +1,20 @@
 # IPsec VPN Server Auto Setup Scripts
 
-[![Build Status](https://img.shields.io/travis/hwdsl2/setup-ipsec-vpn.svg?maxAge=1200)](https://travis-ci.org/hwdsl2/setup-ipsec-vpn) [![GitHub Stars](https://img.shields.io/github/stars/hwdsl2/setup-ipsec-vpn.svg?maxAge=86400)](https://github.com/hwdsl2/setup-ipsec-vpn/stargazers) [![Docker Stars](https://img.shields.io/docker/stars/hwdsl2/ipsec-vpn-server.svg?maxAge=86400)](https://github.com/hwdsl2/docker-ipsec-vpn-server) [![Docker Pulls](https://img.shields.io/docker/pulls/hwdsl2/ipsec-vpn-server.svg?maxAge=86400)](https://github.com/hwdsl2/docker-ipsec-vpn-server)
-
 Set up your own IPsec VPN server in just a few minutes, with both IPsec/L2TP and Cisco IPsec on Ubuntu, Debian and CentOS. All you need to do is provide your own VPN credentials, and let the scripts handle the rest.
 
 An IPsec VPN encrypts your network traffic, so that nobody between you and the VPN server can eavesdrop on your data as it travels via the Internet. This is especially useful when using unsecured networks, e.g. at coffee shops, airports or hotel rooms.
 
 We will use <a href="https://libreswan.org/" target="_blank">Libreswan</a> as the IPsec server, and <a href="https://github.com/xelerance/xl2tpd" target="_blank">xl2tpd</a> as the L2TP provider.
 
-<a href="https://github.com/hwdsl2/docker-ipsec-vpn-server" target="_blank">**&raquo; See also: IPsec VPN Server on Docker**</a>
-
-*Read this in other languages: [English](README.md), [简体中文](README-zh.md).*
-
-#### Table of Contents
-
-- [Quick start](#quick-start)
-- [Features](#features)
-- [Requirements](#requirements)
-- [Installation](#installation)
-- [Next steps](#next-steps)
-- [Important notes](#important-notes)
-- [Upgrade Libreswan](#upgrade-libreswan)
-- [Bugs & Questions](#bugs--questions)
-- [Uninstallation](#uninstallation)
-- [See also](#see-also)
-- [License](#license)
-
 ## Quick start
 
-First, prepare your Linux server[\*](#quick-start-note) with a fresh install of Ubuntu LTS, Debian or CentOS.
+First, prepare your Linux server[\*](#quick-start-note) with a fresh install of Ubuntu LTS or Debian.
 
 Use this one-liner to set up an IPsec VPN server:
 
 ```bash
-wget https://git.io/vpnsetup -O vpnsetup.sh && sudo sh vpnsetup.sh
+curl -sL https://git.io/vpnsetup-interactive | sudo -E bash -
 ```
-
-If using CentOS, replace the link above with `https://git.io/vpnsetup-centos`.
-
-Your VPN login details will be randomly generated, and displayed on the screen when finished.
 
 For other installation options and how to set up VPN clients, read the sections below.
 
@@ -48,22 +24,16 @@ For other installation options and how to set up VPN clients, read the sections 
 ## Features
 
 - **New:** The faster `IPsec/XAuth ("Cisco IPsec")` mode is supported
-- **New:** A pre-built <a href="https://github.com/hwdsl2/docker-ipsec-vpn-server" target="_blank">Docker image</a> of the VPN server is now available
-- Fully automated IPsec VPN server setup, no user input needed
+- Automated IPsec VPN server setup, with interactive user input
 - Encapsulates all VPN traffic in UDP - does not need ESP protocol
 - Can be directly used as "user-data" for a new Amazon EC2 instance
 - Includes `sysctl.conf` optimizations for improved performance
-- Tested with Ubuntu 20.04/18.04/16.04, Debian 10/9/8 and CentOS 8/7/6
 
 ## Requirements
 
 A newly created <a href="https://aws.amazon.com/ec2/" target="_blank">Amazon EC2</a> instance, from one of these images:
 - <a href="https://cloud-images.ubuntu.com/locator/" target="_blank">Ubuntu 20.04 (Focal), 18.04 (Bionic) or 16.04 (Xenial)</a>
 - <a href="https://wiki.debian.org/Cloud/AmazonEC2Image" target="_blank">Debian 10 (Buster)</a>[\*](#debian-10-note)<a href="https://wiki.debian.org/Cloud/AmazonEC2Image" target="_blank">, 9 (Stretch) or 8 (Jessie)</a>
-- <a href="https://wiki.centos.org/Cloud/AWS" target="_blank">CentOS 8 (x86_64) with Updates</a> [\*\*](#centos-8-note)
-- <a href="https://aws.amazon.com/marketplace/pp/B00O7WM7QW" target="_blank">CentOS 7 (x86_64) with Updates</a>
-- <a href="https://aws.amazon.com/marketplace/pp/B00NQAYLWO" target="_blank">CentOS 6 (x86_64) with Updates</a>
-- <a href="https://aws.amazon.com/partners/redhat/faqs/" target="_blank">Red Hat Enterprise Linux (RHEL) 8, 7 or 6</a>
 
 Please see <a href="https://blog.ls20.com/ipsec-l2tp-vpn-auto-setup-for-ubuntu-12-04-on-amazon-ec2/#vpnsetup" target="_blank">detailed instructions</a> and <a href="https://aws.amazon.com/ec2/pricing/" target="_blank">EC2 pricing</a>.
 
@@ -81,8 +51,6 @@ Advanced users can set up the VPN server on a $35 <a href="https://www.raspberry
 
 <a name="debian-10-note"></a>
 \* Debian 10 users should use the standard Linux kernel (not the "cloud" version). Read more <a href="docs/clients.md#debian-10-kernel" target="_blank">here</a>.   
-<a name="centos-8-note"></a>
-\*\* CentOS 8 does not yet have an official EC2 image.
 
 :warning: **DO NOT** run these scripts on your PC or Mac! They should only be used on a server!
 
@@ -97,13 +65,13 @@ To install the VPN, please choose one of the following options:
 **Option 1:** Have the script generate random VPN credentials for you (will be displayed when finished):
 
 ```bash
-wget https://git.io/vpnsetup -O vpnsetup.sh && sudo sh vpnsetup.sh
+wget https://git.io/vpnsetup-interactive -O vpnsetup.sh && sudo sh vpnsetup.sh
 ```
 
 **Option 2:** Edit the script and provide your own VPN credentials:
 
 ```bash
-wget https://git.io/vpnsetup -O vpnsetup.sh
+wget https://git.io/vpnsetup-interactive -O vpnsetup.sh
 nano -w vpnsetup.sh
 [Replace with your own values: YOUR_IPSEC_PSK, YOUR_USERNAME and YOUR_PASSWORD]
 sudo sh vpnsetup.sh
@@ -116,20 +84,14 @@ sudo sh vpnsetup.sh
 ```bash
 # All values MUST be placed inside 'single quotes'
 # DO NOT use these special characters within values: \ " '
-wget https://git.io/vpnsetup -O vpnsetup.sh && sudo \
+wget https://git.io/vpnsetup-interactive -O vpnsetup.sh && sudo \
 VPN_IPSEC_PSK='your_ipsec_pre_shared_key' \
 VPN_USER='your_vpn_username' \
 VPN_PASSWORD='your_vpn_password' \
 sh vpnsetup.sh
 ```
 
-**Note:** If unable to download via `wget`, you may also open <a href="vpnsetup.sh" target="_blank">vpnsetup.sh</a> (or <a href="vpnsetup_centos.sh" target="_blank">vpnsetup_centos.sh</a>) and click the **`Raw`** button. Press `Ctrl-A` to select all, `Ctrl-C` to copy, then paste into your favorite editor.
-
-### CentOS & RHEL
-
-First, update your system with `yum update` and reboot. This is optional, but recommended.
-
-Follow the same steps as above, but replace `https://git.io/vpnsetup` with `https://git.io/vpnsetup-centos`.
+**Note:** If unable to download via `wget`, you may also open <a href="vpnsetup.sh" target="_blank">vpnsetup.sh</a> and click the **`Raw`** button. Press `Ctrl-A` to select all, `Ctrl-C` to copy, then paste into your favorite editor.
 
 ## Next steps
 
@@ -147,8 +109,6 @@ Enjoy your very own VPN! :sparkles::tada::rocket::sparkles:
 
 ## Important notes
 
-*Read this in other languages: [English](README.md#important-notes), [简体中文](README-zh.md#重要提示).*
-
 **Windows users**: This <a href="docs/clients.md#windows-error-809" target="_blank">one-time registry change</a> is required if the VPN server and/or client is behind NAT (e.g. home router).
 
 **Android users**: If you encounter connection issues, try <a href="docs/clients.md#android-mtumss-issues" target="_blank">these steps</a>.
@@ -161,9 +121,9 @@ For servers with an external firewall (e.g. <a href="https://docs.aws.amazon.com
 
 Clients are set to use <a href="https://developers.google.com/speed/public-dns/" target="_blank">Google Public DNS</a> when the VPN is active. If another DNS provider is preferred, replace `8.8.8.8` and `8.8.4.4` in both `/etc/ppp/options.xl2tpd` and `/etc/ipsec.conf`, then reboot your server.
 
-Using kernel support could improve IPsec/L2TP performance. It is available on Ubuntu 16.04-20.04, Debian 9-10 and CentOS 6-8. Ubuntu users: Install `linux-modules-extra-$(uname -r)` (or `linux-image-extra`), then run `service xl2tpd restart`.
+Using kernel support could improve IPsec/L2TP performance. It is available on Ubuntu 16.04-20.04 and Debian 9-10. Ubuntu users: Install `linux-modules-extra-$(uname -r)` (or `linux-image-extra`), then run `service xl2tpd restart`.
 
-To modify the IPTables rules after install, edit `/etc/iptables.rules` and/or `/etc/iptables/rules.v4` (Ubuntu/Debian), or `/etc/sysconfig/iptables` (CentOS/RHEL). Then reboot your server.
+To modify the IPTables rules after install, edit `/etc/iptables.rules` and/or `/etc/iptables/rules.v4` (Ubuntu/Debian). Then reboot your server.
 
 When connecting via `IPsec/L2TP`, the VPN server has IP `192.168.42.1` within the VPN subnet `192.168.42.0/24`.
 
@@ -171,36 +131,13 @@ The scripts will backup existing config files before making changes, with `.old-
 
 ## Upgrade Libreswan
 
-The additional scripts <a href="extras/vpnupgrade.sh" target="_blank">vpnupgrade.sh</a> and <a href="extras/vpnupgrade_centos.sh" target="_blank">vpnupgrade_centos.sh</a> can be used to upgrade <a href="https://libreswan.org" target="_blank">Libreswan</a> (<a href="https://github.com/libreswan/libreswan/blob/master/CHANGES" target="_blank">changelog</a> | <a href="https://lists.libreswan.org/mailman/listinfo/swan-announce" target="_blank">announce</a>). Edit the `SWAN_VER` variable as necessary. Check which version is installed: `ipsec --version`.
+The additional scripts <a href="extras/vpnupgrade.sh" target="_blank">vpnupgrade.sh</a> can be used to upgrade <a href="https://libreswan.org" target="_blank">Libreswan</a> (<a href="https://github.com/libreswan/libreswan/blob/master/CHANGES" target="_blank">changelog</a> | <a href="https://lists.libreswan.org/mailman/listinfo/swan-announce" target="_blank">announce</a>). Edit the `SWAN_VER` variable as necessary. Check which version is installed: `ipsec --version`.
 
 ```bash
 # Ubuntu & Debian
-wget https://git.io/vpnupgrade -O vpnupgrade.sh
-# CentOS & RHEL
-wget https://git.io/vpnupgrade-centos -O vpnupgrade.sh
+curl -sL https://git.io/vpnupgrade | sudo -E bash -
 ```
-
-## Bugs & Questions
-
-- Got a question? Please first search other people's comments <a href="https://gist.github.com/hwdsl2/9030462#comments" target="_blank">in this Gist</a> and <a href="https://blog.ls20.com/ipsec-l2tp-vpn-auto-setup-for-ubuntu-12-04-on-amazon-ec2/#disqus_thread" target="_blank">on my blog</a>.
-- Ask VPN related questions on the <a href="https://lists.libreswan.org/mailman/listinfo/swan" target="_blank">Libreswan</a> or <a href="https://lists.strongswan.org/mailman/listinfo/users" target="_blank">strongSwan</a> mailing list, or read these wikis: <a href="https://libreswan.org/wiki/Main_Page" target="_blank">[1]</a> <a href="https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/security_guide/sec-securing_virtual_private_networks" target="_blank">[2]</a> <a href="https://wiki.strongswan.org/projects/strongswan/wiki/UserDocumentation" target="_blank">[3]</a> <a href="https://wiki.gentoo.org/wiki/IPsec_L2TP_VPN_server" target="_blank">[4]</a> <a href="https://wiki.archlinux.org/index.php/Openswan_L2TP/IPsec_VPN_client_setup" target="_blank">[5]</a>.
-- If you found a reproducible bug, open a <a href="https://github.com/hwdsl2/setup-ipsec-vpn/issues?q=is%3Aissue" target="_blank">GitHub Issue</a> to submit a bug report.
 
 ## Uninstallation
 
 Please refer to <a href="docs/uninstall.md" target="_blank">Uninstall the VPN</a>.
-
-## See also
-
-- <a href="https://github.com/hwdsl2/docker-ipsec-vpn-server" target="_blank">IPsec VPN Server on Docker</a>
-- <a href="https://github.com/trailofbits/algo" target="_blank">Algo VPN</a>
-- <a href="https://github.com/StreisandEffect/streisand" target="_blank">Streisand</a>
-- <a href="https://github.com/Nyr/openvpn-install" target="_blank">OpenVPN Install</a>
-
-## License
-
-Copyright (C) 2014-2020 <a href="https://www.linkedin.com/in/linsongui" target="_blank">Lin Song</a> <a href="https://www.linkedin.com/in/linsongui" target="_blank"><img src="https://static.licdn.com/scds/common/u/img/webpromo/btn_viewmy_160x25.png" width="160" height="25" border="0" alt="View my profile on LinkedIn"></a>   
-Based on <a href="https://github.com/sarfata/voodooprivacy" target="_blank">the work of Thomas Sarlandie</a> (Copyright 2012)
-
-This work is licensed under the <a href="http://creativecommons.org/licenses/by-sa/3.0/" target="_blank">Creative Commons Attribution-ShareAlike 3.0 Unported License</a>  
-Attribution required: please include my name in any derivative and let me know how you have improved it!
