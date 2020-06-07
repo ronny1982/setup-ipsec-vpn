@@ -13,7 +13,7 @@ First, prepare your Linux server[\*](#quick-start-note) with a fresh install of 
 Use this one-liner to set up an IPsec VPN server:
 
 ```bash
-curl -sL https://git.io/vpnsetup-interactive | sudo -E bash -
+sudo bash <(curl -sL https://git.io/vpnsetup-interactive)
 ```
 
 For other installation options and how to set up VPN clients, read the sections below.
@@ -135,7 +135,7 @@ The additional scripts <a href="extras/vpnupgrade.sh" target="_blank">vpnupgrade
 
 ```bash
 # Ubuntu & Debian
-curl -sL https://git.io/vpnupgrade | sudo -E bash -
+sudo bash <(curl -sL https://git.io/vpnupgrade)
 ```
 
 ## Uninstallation
