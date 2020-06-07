@@ -12,7 +12,7 @@
 # - All values MUST be placed inside 'single quotes'
 # - DO NOT use these special characters within values: \ " '
 
-Please enter a Pre-Shared Key:
+echo Please enter a Pre-Shared Key:
 read YOUR_IPSEC_PSK
 echo Please enter a Username:
 read YOUR_USERNAME
