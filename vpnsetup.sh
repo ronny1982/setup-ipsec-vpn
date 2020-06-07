@@ -4,19 +4,7 @@
 # Works on any dedicated server or virtual private server (VPS) except OpenVZ.
 #
 # DO NOT RUN THIS SCRIPT ON YOUR PC OR MAC!
-#
-# The latest version of this script is available at:
-# https://github.com/hwdsl2/setup-ipsec-vpn
-#
-# Copyright (C) 2014-2020 Lin Song <linsongui@gmail.com>
-# Based on the work of Thomas Sarlandie (Copyright 2012)
-#
-# This work is licensed under the Creative Commons Attribution-ShareAlike 3.0
-# Unported License: http://creativecommons.org/licenses/by-sa/3.0/
-#
-# Attribution required: please include my name in any derivative and let me
-# know how you have improved it!
-
+# 
 # =====================================================
 
 # Define your own values for these variables
@@ -24,13 +12,18 @@
 # - All values MUST be placed inside 'single quotes'
 # - DO NOT use these special characters within values: \ " '
 
-YOUR_IPSEC_PSK=''
-YOUR_USERNAME=''
-YOUR_PASSWORD=''
+Please enter a Pre-Shared Key:
+read YOUR_IPSEC_PSK
+echo Please enter a Username:
+read YOUR_USERNAME
+echo Please enter a Password:
+read YOUR_PASSWORD
 
-# Important notes:   https://git.io/vpnnotes
-# Setup VPN clients: https://git.io/vpnclients
-# IKEv2 guide:       https://git.io/ikev2
+echo YOUR_IPSEC_PSK
+echo YOUR_USERNAME
+echo YOUR_PASSWORD
+
+exit 0
 
 # =====================================================
 
