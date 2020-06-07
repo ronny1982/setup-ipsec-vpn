@@ -13,12 +13,6 @@ read -p "Please enter a Pre-Shared Key: " YOUR_IPSEC_PSK
 read -p "Please enter a Username: " YOUR_USERNAME
 read -p "Please enter a Password: " YOUR_PASSWORD
 
-echo "Pre-Shared Key: $YOUR_IPSEC_PSK"
-echo "User: $YOUR_USERNAME"
-echo "Pass: $YOUR_PASSWORD"
-
-exit 0
-
 # =====================================================
 
 export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
