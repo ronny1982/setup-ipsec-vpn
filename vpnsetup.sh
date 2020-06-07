@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 # Script for automatic setup of an IPsec VPN server on Ubuntu LTS and Debian.
 # Works on any dedicated server or virtual private server (VPS) except OpenVZ.
@@ -8,16 +8,10 @@
 # =====================================================
 
 # Define your own values for these variables
-# - IPsec pre-shared key, VPN username and password
-# - All values MUST be placed inside 'single quotes'
-# - DO NOT use these special characters within values: \ " '
 
-echo Please enter a Pre-Shared Key:
-read YOUR_IPSEC_PSK
-echo Please enter a Username:
-read YOUR_USERNAME
-echo Please enter a Password:
-read YOUR_PASSWORD
+read -p "Please enter a Pre-Shared Key: " YOUR_IPSEC_PSK
+read -p "Please enter a Username: " YOUR_USERNAME
+read -p "Please enter a Password: " YOUR_PASSWORD
 
 echo YOUR_IPSEC_PSK
 echo YOUR_USERNAME
